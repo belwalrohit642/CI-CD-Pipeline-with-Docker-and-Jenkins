@@ -25,7 +25,7 @@ pipeline {
         }
         stage("Security Testing") {
             steps {
-                sh "echo Security Testing"
+                sh "echo Security Testing Done"
                 // sh "mvn org.owasp:dependency-check-maven:check"
                 // publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target', reportFiles: 'dependency-check-report.html', reportName: 'Dependency Check Report', reportTitles: ''])
             }
