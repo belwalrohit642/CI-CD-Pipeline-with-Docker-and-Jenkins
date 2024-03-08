@@ -6,5 +6,20 @@ stage("code checkout"){
 checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitCred', url: 'https://github.com/belwalrohit642/CI-CD-Pipeline-with-Docker-and-Jenkins.git']])
 }
 }
+            stage("Code Stability") {
+        sh "mvn clean install"
+    }
+    stage("Code Quality") {
+        sh "mvn checkstyle:checkstyle"
+        recordIssues(tools: [checkStyle(pattern: '**/checkstyle-result.xml')])
+    }
+    stage("Unit Testing") {
+        sh "mvn test"
+        recordIssues(tools: [junitParser(pattern: 'target/surefire-reports/*.xml')])
+    }
+    stage("Security Testing") {
+        sh "mvn org.owasp:dependency-check-maven:check"
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target', reportFiles: 'dependency-check-report.html', reportName: 'Dependency Check Report', reportTitles: ''])
+    }
 }
 }
