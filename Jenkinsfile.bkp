@@ -49,5 +49,29 @@ pipeline {
                 recordIssues(tools: [junitParser(pattern: 'target/surefire-reports/*.xml')])
             }
         }
+stage(“Code Coverage”) {
+agent {
+docker {
+args “-v ${HOME}/.m2:/root/.m2”
+image ‘opstreedevops/maven:java8’
+}
+}
+steps {
+git credentialsId: ‘git-creds’, url: ‘https://github.com/belwalrohit642/CI-CD-Pipeline-with-Docker-and-Jenkins.git’
+sh “mvn cobertura:cobertura”
+cobertura autoUpdateHealth: false, autoUpdateStability:
+false,
+coberturaReportFile: ‘**/target/site/cobertura/
+coverage.xml’,
+conditionalCoverageTargets: ‘70, 0, 0’,
+More books: https://t.me/booksforits
+failUnhealthy: false,
+failUnstable: false, lineCoverageTargets: ‘80, 0, 0’,
+maxNumberOfBuilds: 0, methodCoverageTargets: ‘80, 0,
+0’,
+onlyStable: false, sourceEncoding: ‘ASCII’,
+zoomCoverageChart: false
+}
+}
     }
 }
