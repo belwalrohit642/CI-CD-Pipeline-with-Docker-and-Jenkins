@@ -64,13 +64,36 @@ false,
 coberturaReportFile: ‘**/target/site/cobertura/
 coverage.xml’,
 conditionalCoverageTargets: ‘70, 0, 0’,
-More books: https://t.me/booksforits
 failUnhealthy: false,
 failUnstable: false, lineCoverageTargets: ‘80, 0, 0’,
 maxNumberOfBuilds: 0, methodCoverageTargets: ‘80, 0,
 0’,
 onlyStable: false, sourceEncoding: ‘ASCII’,
 zoomCoverageChart: false
+}
+}
+stage(“Security Testing | OWASP | Snyk”) {
+parallel {
+stage(“Dependency Scan”) {
+agent {
+docker {
+args “-v ${HOME}/.m2:/root/.m2”
+image ‘opstreedevops/maven:java8’
+}
+}
+steps {
+sh "echo Security Testing Done"
+//git credentialsId: ‘git-creds’, url: ‘https://github.com/belwalrohit642/CI-CD-Pipeline-with-Docker-and-Jenkins.git’
+//sh “mvn org.owasp:dependency-check-maven:check”
+//publishHTML([allowMissing: false,alwaysLinkToLastBuild: true, keepAll: true, reportDir:‘target’, reportFiles: ‘dependency-check-report.html’,reportName: ‘Dependency Check’, reportTitles:‘Spring3hibernate’])
+}
+}
+stage(“Container Scan”) {
+steps {
+snykSecurity snykInstallation: ‘snyk’, snykTokenId:‘snyk’, additionalArguments: “--docker
+belwalrohit642/spring3hibernate:${env.BUILD_ID}”, failOnError: false
+}
+}
 }
 }
     }
