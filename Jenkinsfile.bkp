@@ -11,12 +11,12 @@ pipeline {
                 sh "mvn clean install"
             }
         }
-stage(“Code Stability | Build Image”) {
-steps {
-script {
-docker.build(“belwalrohit642/spring3hibernate:${env.BUILD_ID}”)
-}
-}
-}
+        stage("Code Stability | Build Image") {
+            steps {
+                script {
+                    docker.build("belwalrohit642/spring3hibernate:${env.BUILD_ID}")
+                }
+            }
+        }
     }
 }
