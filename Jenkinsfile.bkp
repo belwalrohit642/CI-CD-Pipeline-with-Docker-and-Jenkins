@@ -32,7 +32,7 @@ pipeline {
         }
 stage(“Hadolint”) {
 steps {
-sh “hadolint Dockerfile --no-fail -f json | tee -a hadolint.json”
+sh 'hadolint Dockerfile --no-fail -f json | tee -a hadolint.json'
 recordIssues(tools: [hadoLint(pattern: ‘hadolint.json’)])
 }
 }
