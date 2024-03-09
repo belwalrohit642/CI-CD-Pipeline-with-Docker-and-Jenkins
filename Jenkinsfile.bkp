@@ -28,30 +28,26 @@ pipeline {
                         recordIssues(tools: [checkStyle(pattern: '**/checkstyle-result.xml')])
                     }
                 }
+                stage("Hadolint") {
+                    steps {
+                        sh 'hadolint Dockerfile --no-fail -f json | tee -a hadolint.json'
+                        recordIssues(tools: [hadoLint(pattern: 'hadolint.json')])
+                    }
+                }
             }
         }
-stage(“Hadolint”) {
-steps {
-sh 'hadolint Dockerfile --no-fail -f json | tee -a hadolint.json'
-recordIssues(tools: [hadoLint(pattern: ‘hadolint.json’)])
-}
-}
-}
-}
-stage(“Unit Testing”) {
-agent {
-docker {
-args “-v ${HOME}/.m2:/root/.m2”
-image ‘opstreedevops/maven:java8’
-}
-}
-steps {
-git credentialsId: ‘gitCred’, url: ‘https://github.com/belwalrohit642/CI-CD-Pipeline-with-Docker-and-Jenkins.git’
-sh “mvn test”
-recordIssues(tools: [junitParser(pattern: ‘target/surefire-reports/*.xml’)])
-}
-}
-}
-}
+        stage("Unit Testing") {
+            agent {
+                docker {
+                    args "-v ${HOME}/.m2:/root/.m2"
+                    image 'opstreedevops/maven:java8'
+                }
+            }
+            steps {
+                git credentialsId: 'gitCred', url: 'https://github.com/belwalrohit642/CI-CD-Pipeline-with-Docker-and-Jenkins.git'
+                sh "mvn test"
+                recordIssues(tools: [junitParser(pattern: 'target/surefire-reports/*.xml')])
+            }
+        }
     }
 }
