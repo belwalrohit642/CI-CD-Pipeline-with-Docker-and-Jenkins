@@ -36,15 +36,4 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            emailext(
-                subject: "Pipeline ${currentBuild.result}: Job '${env.JOB_NAME}'",
-                body: """<p>Build ${currentBuild.result}</p>
-                         <p>More details at: <a href='${BUILD_URL}'>${BUILD_URL}</a></p>""",
-                to: 'belwalrohit642@gmail.com',
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-            )
-        }
-    }
 }
