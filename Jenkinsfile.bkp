@@ -92,13 +92,11 @@ pipeline {
                     }
                 }
             }
-        
+        }
         stage("To DockerHub") {
             steps {
                 script {
-
                     def dockerHubCredentials = 'dockerHubCred'
-
                     def dockerImageName = "belwalrohit642/spring3hibernate"
                     def dockerImageTag = "${env.BUILD_ID}"
                     def dockerImageFullName = "${dockerImageName}:${dockerImageTag}"
