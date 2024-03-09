@@ -1,18 +1,22 @@
 ---
 - name: Deploy Docker Image to Dev Environment
   hosts: dev_servers
-  become: yes  
+  become: yes  # Run tasks as sudo
+
+  vars:
+    docker_image_tag: "{{ lookup('env', 'BUILD_NUMBER') | default('latest') }}"
+    # Use BUILD_NUMBER environment variable from Jenkins as the default tag, fallback to 'latest'
 
   tasks:
     - name: Pull Docker Image
       docker_image:
-        name: belwalrohit642/spring3hibernate:29
+        name: belwalrohit642/spring3hibernate:{{ docker_image_tag }}
         source: pull
 
     - name: Run Docker Container
       docker_container:
         name: spring3hibernate_dev
-        image: belwalrohit642/spring3hibernate:29
+        image: belwalrohit642/spring3hibernate:{{ docker_image_tag }}
         state: started
         ports:
-          - "8080:8080" 
+          - "8080:8080"  # Adjust ports as needed
