@@ -18,5 +18,20 @@ pipeline {
                 }
             }
         }
+stage(“Code Quality | Checkstyle | Hadolint”) {
+parallel {
+stage(“Checkstyle”) {
+agent {
+docker {
+args “-v ${HOME}/.m2:/root/.m2”
+image ‘opstreedevops/maven:java8’
+}
+}
+steps {
+git credentialsId: ‘gitCred’, url: ‘https://github.com/belwalrohit642/CI-CD-Pipeline-with-Docker-and-Jenkins.git’
+sh “mvn checkstyle:checkstyle”
+recordIssues(tools: [checkStyle(pattern: ‘**/checkstyle-result.xml’)])
+}
+}
     }
 }
