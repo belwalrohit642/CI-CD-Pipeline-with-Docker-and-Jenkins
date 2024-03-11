@@ -1,6 +1,6 @@
 ---
 - name: Deploy Docker Image to Dev Environment
-  hosts: dev_servers
+  hosts: servers
   become: yes  # Run tasks as sudo
 
   vars:
