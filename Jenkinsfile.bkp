@@ -111,6 +111,7 @@ pipeline {
        stage("Deploy to Dev Environment") {
             steps {
                 script {
+                    sh "ls -al ${WORKSPACE}"
                     sh "ansible-playbook -i /etc/ansible/inventory.ini  play.yml -e BUILD_NUMBER=${env.BUILD_NUMBER}"
                 }
             }
