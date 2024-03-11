@@ -111,8 +111,7 @@ pipeline {
        stage("Deploy to Dev Environment") {
             steps {
                 script {
-                    sh "ls -al ${WORKSPACE}"
-                    sh "ansible-playbook -i inventory.ini  play.yaml -e BUILD_NUMBER=${env.BUILD_NUMBER}"
+                    ansiblePlaybook credentialsId: 'ec2-user', disableHostKeyChecking: true, installation: 'Ansible', inventory: '/etc/ansible/inventory.ini', playbook: '/var/lib/jenkins/workspace/Spring3Hibernate/play.yaml', vaultTmpPath: ''
                 }
             }
         }
