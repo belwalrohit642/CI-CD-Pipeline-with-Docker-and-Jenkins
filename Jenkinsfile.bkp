@@ -112,7 +112,7 @@ pipeline {
             steps {
                 script {
                     sh "ls -al ${WORKSPACE}"
-                    sh "ansible-playbook -i /etc/ansible/inventory.ini  play.yml -e BUILD_NUMBER=${env.BUILD_NUMBER}"
+                    sh "ansible-playbook -i inventory.ini  play.yml -e BUILD_NUMBER=${env.BUILD_NUMBER}"
                 }
             }
         }
